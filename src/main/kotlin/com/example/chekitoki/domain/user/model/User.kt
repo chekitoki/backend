@@ -6,9 +6,14 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
+import org.hibernate.annotations.Where
 
 @Entity
 @Table(name = "user")
+@SQLDelete(sql = "UPDATE user SET deleted = true WHERE id = ?")
+@SQLRestriction("deleted = false")
 class User (
     email: String,
     name: String,
@@ -22,6 +27,8 @@ class User (
     var name: String = name
 
     var password: String = password
+
+    var deleted: Boolean = false
 
     fun updateProfile(name: String) {
         this.name = name
