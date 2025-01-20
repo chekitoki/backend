@@ -21,4 +21,8 @@ class UserStoreImpl(
     override fun save(user: User): User {
         return userRepository.save(user)
     }
+
+    override fun deleteById(id: Long) {
+        userRepository.deleteById(id)
+    }
 }
