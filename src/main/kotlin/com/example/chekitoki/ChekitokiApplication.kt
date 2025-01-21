@@ -2,7 +2,9 @@ package com.example.chekitoki
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 
+@EnableJpaAuditing
 @SpringBootApplication
 class ChekitokiApplication
 
