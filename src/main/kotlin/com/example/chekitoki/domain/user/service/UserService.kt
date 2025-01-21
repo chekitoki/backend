@@ -35,7 +35,7 @@ class UserService(
 
         confirmPassword(info.oldPassword, user.password)
 
-        user.password = encoder.encode(info.newPassword)
+        user.updatePassword(encoder.encode(info.newPassword))
         userStore.save(user)
     }
 
