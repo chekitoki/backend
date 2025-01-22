@@ -30,11 +30,23 @@ class User (
 
     var deleted: Boolean = false
 
+    var refreshToken: String? = null
+
+    var role: Role = Role.USER
+
     fun updateProfile(name: String) {
         this.name = name
     }
 
     fun updatePassword(password: String) {
         this.password = password
+    }
+
+    fun updateRefreshToken(refreshToken: String) {
+        this.refreshToken = refreshToken
+    }
+
+    fun updateRole(role: Role) {
+        this.role = role
     }
 }
