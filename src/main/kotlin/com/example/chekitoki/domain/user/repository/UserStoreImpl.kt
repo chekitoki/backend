@@ -18,6 +18,11 @@ class UserStoreImpl(
             .orElseThrow { NoSuchUserException("$id 에 대한 회원 정보가 존재하지 않습니다.") }
     }
 
+    override fun getByEmail(email: String): User {
+        return userRepository.findByEmail(email)
+            ?: throw NoSuchUserException("$email 에 대한 회원 정보가 존재하지 않습니다.")
+    }
+
     override fun save(user: User): User {
         return userRepository.save(user)
     }
