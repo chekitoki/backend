@@ -13,7 +13,7 @@ class UserService(
     private val encoder: PasswordEncoderWrapper
 ) {
     fun createUser(info: UserInfo.Create): UserInfo.Response {
-        val user = userStore.save(User(info.email, info.name, encoder.encode(info.password)))
+        val user = userStore.save(User(info.userId, info.email, info.name, encoder.encode(info.password)))
         return UserInfo.Response(user)
     }
 

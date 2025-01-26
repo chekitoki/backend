@@ -2,21 +2,23 @@ package com.example.chekitoki.domain.user.dto
 
 class UserRequestDto {
     data class Login(
-        val email: String,
+        val userId: String,
         val password: String,
     ) {
         fun toInfo() = UserInfo.Login(
-            email = email,
+            userId = userId,
             password = password,
         )
     }
 
     data class Create(
+        val userId: String,
         val email: String,
         val name: String,
         val password: String,
     ) {
         fun toInfo() = UserInfo.Create(
+            userId = userId,
             email = email,
             name = name,
             password = password,
