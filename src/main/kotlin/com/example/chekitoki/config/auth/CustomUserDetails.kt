@@ -9,7 +9,7 @@ class CustomUserDetails (
 ) : UserDetails {
     override fun getAuthorities() = listOf(GrantedAuthority { user.role.value })
     override fun getPassword(): String  = user.password
-    override fun getUsername(): String = user.email
+    override fun getUsername(): String = user.userId
 
     override fun isAccountNonExpired() = true
     override fun isAccountNonLocked() = true
