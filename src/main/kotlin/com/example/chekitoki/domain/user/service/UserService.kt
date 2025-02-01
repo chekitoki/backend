@@ -6,12 +6,14 @@ import com.example.chekitoki.domain.user.dto.UserResponseDto
 import com.example.chekitoki.domain.user.exception.InvalidPasswordException
 import com.example.chekitoki.domain.user.model.User
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
     private val userStore: UserStore,
     private val encoder: PasswordEncoderWrapper
 ) {
+    @Transactional
     fun createUser(info: UserInfo.Create): UserInfo.Response {
         val user = userStore.save(User(info.userId, info.email, info.name, encoder.encode(info.password)))
         return UserInfo.Response(user)
@@ -22,6 +24,7 @@ class UserService(
         return UserInfo.Response(user)
     }
 
+    @Transactional
     fun updateProfile(info: UserInfo.UpdateProfile): UserInfo.Response {
         val user = userStore.getById(info.id)
 
@@ -30,6 +33,7 @@ class UserService(
         return UserInfo.Response(userStore.save(user))
     }
 
+    @Transactional
     fun updatePassword(info: UserInfo.UpdatePassword) {
         val user = userStore.getById(info.id)
 
@@ -39,6 +43,7 @@ class UserService(
         userStore.save(user)
     }
 
+    @Transactional
     fun deleteUser(id: Long) {
         userStore.deleteById(id)
     }
