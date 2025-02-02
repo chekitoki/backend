@@ -10,7 +10,7 @@ class CustomUserDetailsService(
     private val userStore: UserStore,
 ) : UserDetailsService {
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = userStore.getByEmail(username)
+        val user = userStore.getByUserId(username)
         return CustomUserDetails(user)
     }
 }
