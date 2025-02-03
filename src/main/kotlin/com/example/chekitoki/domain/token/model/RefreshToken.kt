@@ -16,5 +16,5 @@ class RefreshToken(
     @JoinColumn(name = "user_id")
     val user: User = user
 
-    val token: String = token
+    var token: String = token
 }
