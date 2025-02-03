@@ -15,6 +15,7 @@ import org.hibernate.annotations.Where
 @SQLDelete(sql = "UPDATE user SET deleted = true WHERE id = ?")
 @SQLRestriction("deleted = false")
 class User (
+    userId: String,
     email: String,
     name: String,
     password: String,
@@ -22,7 +23,9 @@ class User (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 
-    val email: String = email
+    val userId: String = userId
+
+    var email: String = email
 
     var name: String = name
 
@@ -30,11 +33,27 @@ class User (
 
     var deleted: Boolean = false
 
+    var refreshToken: String? = null
+
+    var role: Role = Role.USER
+
+    fun updateEmail(email: String) {
+        this.email = email
+    }
+
     fun updateProfile(name: String) {
         this.name = name
     }
 
     fun updatePassword(password: String) {
         this.password = password
+    }
+
+    fun updateRefreshToken(refreshToken: String) {
+        this.refreshToken = refreshToken
+    }
+
+    fun updateRole(role: Role) {
+        this.role = role
     }
 }
