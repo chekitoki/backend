@@ -2,7 +2,6 @@ package com.example.chekitoki.domain.user.service
 
 import com.example.chekitoki.config.PasswordEncoderWrapper
 import com.example.chekitoki.domain.user.dto.UserInfo
-import com.example.chekitoki.domain.user.dto.UserResponseDto
 import com.example.chekitoki.domain.user.exception.InvalidPasswordException
 import com.example.chekitoki.domain.user.model.User
 import org.springframework.stereotype.Service
@@ -37,7 +36,7 @@ class UserService(
     fun updatePassword(userId: String, info: UserInfo.UpdatePassword) {
         val user = userStore.getByUserId(userId)
 
-        confirmPassword(info.oldPassword, user.password)
+        validatePasswordMatch(info.oldPassword, user.password)
 
         user.updatePassword(encoder.encode(info.newPassword))
         userStore.save(user)
@@ -48,7 +47,7 @@ class UserService(
         userStore.deleteByUserId(userId)
     }
 
-    private fun confirmPassword(oldPassword: String, newPassword: String) {
+    private fun validatePasswordMatch(oldPassword: String, newPassword: String) {
         if (!encoder.matches(oldPassword, newPassword)) {
             throw InvalidPasswordException("비밀번호가 일치하지 않습니다.")
         }
