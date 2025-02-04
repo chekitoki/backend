@@ -26,22 +26,22 @@ class UserRequestDto {
     }
 
     data class UpdateProfile(
-        val userId: Long,
+        val id: Long,
         val name: String,
     ) {
         fun toInfo() = UserInfo.UpdateProfile(
-            id = userId,
+            id = id,
             name = name,
         )
     }
 
     data class UpdatePassword(
-        val userId: Long,
+        val id: Long,
         val oldPassword: String,
         val newPassword: String,
     ) {
         fun toInfo() = UserInfo.UpdatePassword(
-            id = userId,
+            id = id,
             oldPassword = oldPassword,
             newPassword = newPassword,
         )
