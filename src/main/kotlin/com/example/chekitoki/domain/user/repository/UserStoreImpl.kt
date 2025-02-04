@@ -32,7 +32,7 @@ class UserStoreImpl(
         return userRepository.save(user)
     }
 
-    override fun deleteById(id: Long) {
-        userRepository.deleteById(id)
+    override fun deleteByUserId(userId: String) {
+        userRepository.deleteByUserId(userId)
     }
 }
