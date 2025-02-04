@@ -25,8 +25,8 @@ class UserService(
     }
 
     @Transactional
-    fun updateProfile(info: UserInfo.UpdateProfile): UserInfo.Response {
-        val user = userStore.getById(info.id)
+    fun updateProfile(userId: String, info: UserInfo.UpdateProfile): UserInfo.Response {
+        val user = userStore.getByUserId(userId)
 
         user.updateProfile(info.name)
 
@@ -34,8 +34,8 @@ class UserService(
     }
 
     @Transactional
-    fun updatePassword(info: UserInfo.UpdatePassword) {
-        val user = userStore.getById(info.id)
+    fun updatePassword(userId: String, info: UserInfo.UpdatePassword) {
+        val user = userStore.getByUserId(userId)
 
         confirmPassword(info.oldPassword, user.password)
 
@@ -44,8 +44,8 @@ class UserService(
     }
 
     @Transactional
-    fun deleteUser(id: Long) {
-        userStore.deleteById(id)
+    fun deleteUser(userId: String) {
+        userStore.deleteByUserId(userId)
     }
 
     private fun confirmPassword(oldPassword: String, newPassword: String) {

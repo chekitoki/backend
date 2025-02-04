@@ -3,6 +3,8 @@ package com.example.chekitoki.domain.user.controller
 import com.example.chekitoki.domain.user.dto.UserRequestDto
 import com.example.chekitoki.domain.user.dto.UserResponseDto
 import com.example.chekitoki.domain.user.service.UserService
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -28,23 +30,25 @@ class UserController (
 
     @PatchMapping("/update/profile")
     fun updateUserProfile(
+        @AuthenticationPrincipal userDetails: UserDetails,
         @RequestBody request: UserRequestDto.UpdateProfile,
     ): UserResponseDto {
-        val response = userService.updateProfile(request.toInfo())
+        val response = userService.updateProfile(userDetails.username, request.toInfo())
         return response.toResponseDetail()
     }
 
     @PatchMapping("/update/password")
     fun updateUserPassword(
+        @AuthenticationPrincipal userDetails: UserDetails,
         @RequestBody request: UserRequestDto.UpdatePassword,
     ) {
-        return userService.updatePassword(request.toInfo())
+        return userService.updatePassword(userDetails.username, request.toInfo())
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     fun deleteUser(
-        @PathVariable userId: Long,
+        @AuthenticationPrincipal userDetails: UserDetails,
     ) {
-        userService.deleteUser(userId)
+        userService.deleteUser(userDetails.username)
     }
 }
