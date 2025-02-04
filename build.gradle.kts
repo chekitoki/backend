@@ -38,16 +38,26 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
     implementation("org.springframework.boot:spring-boot-starter-security")
 
     // jwt
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+    // test
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
+    testImplementation("io.kotest:kotest-assertions-core:5.5.4")
+    testImplementation("io.kotest:kotest-framework-engine:5.5.4")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
+
+    testImplementation("io.mockk:mockk:1.13.5")
+
+    // spring rest docs
+    testImplementation("org.springframework.restdocs-mockmvc:2.0.6.RELEASE")
+    testImplementation("org.springframework.restdocs-asciidoctor:2.0.6.RELEASE")
 }
 
 kotlin {
