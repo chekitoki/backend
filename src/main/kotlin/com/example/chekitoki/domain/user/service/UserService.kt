@@ -2,6 +2,7 @@ package com.example.chekitoki.domain.user.service
 
 import com.example.chekitoki.config.PasswordEncoderWrapper
 import com.example.chekitoki.domain.user.dto.UserInfo
+import com.example.chekitoki.domain.user.exception.DuplicateUserException
 import com.example.chekitoki.domain.user.exception.InvalidPasswordException
 import com.example.chekitoki.domain.user.model.User
 import org.springframework.stereotype.Service
@@ -14,6 +15,7 @@ class UserService(
 ) {
     @Transactional
     fun createUser(info: UserInfo.Create): UserInfo.Response {
+        validateUserId(info.userId)
         val user = userStore.save(User(info.userId, info.email, info.name, encoder.encode(info.password)))
         return UserInfo.Response(user)
     }
@@ -45,6 +47,12 @@ class UserService(
     @Transactional
     fun deleteUser(userId: String) {
         userStore.deleteByUserId(userId)
+    }
+
+    private fun validateUserId(userId: String) {
+        if (userStore.existsByUserId(userId)) {
+            throw DuplicateUserException("이미 존재하는 아이디입니다.")
+        }
     }
 
     private fun validatePasswordMatch(oldPassword: String, newPassword: String) {
