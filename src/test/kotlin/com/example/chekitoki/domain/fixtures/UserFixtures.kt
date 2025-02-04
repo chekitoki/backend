@@ -11,7 +11,7 @@ class UserFixtures {
         const val userPassword = "asdfqwer1234"
         const val id = 1L
 
-        private const val modifiedName = "수정된 테스트"
+        const val modifiedName = "수정된 테스트"
         private const val modifiedPassword = "qwer1234asdf"
 
         private const val anotherUserId = "rnignon"
@@ -21,7 +21,8 @@ class UserFixtures {
         private const val anotherId = 2L
 
         val testUser = User(userId, userEmail, userName, userPassword)
-        val modifiedUser = User(userId, userEmail, modifiedName, modifiedPassword)
+        val modifiedProfileUser = User(userId, userEmail, modifiedName, userPassword)
+        val modifiedPasswordUser = User(userId, userEmail, userName, modifiedPassword)
         val anotherUser = User(anotherUserId, anotherUserEmail, anotherUserName, anotherUserPassword)
 
         /* request dto */
