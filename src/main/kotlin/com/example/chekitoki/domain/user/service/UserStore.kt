@@ -3,6 +3,7 @@ package com.example.chekitoki.domain.user.service
 import com.example.chekitoki.domain.user.model.User
 
 interface UserStore {
+    fun existsByUserId(userId: String): Boolean
     fun findByEmail(email: String): User?
     fun getById(id: Long): User
     fun getByUserId(userId: String): User
