@@ -2,6 +2,9 @@ package com.example.chekitoki.domain.user.service
 
 import com.example.chekitoki.config.PasswordEncoderWrapper
 import com.example.chekitoki.domain.fixtures.UserFixtures
+import com.example.chekitoki.domain.user.exception.DuplicatePasswordException
+import com.example.chekitoki.domain.user.exception.DuplicateUserException
+import com.example.chekitoki.domain.user.exception.InvalidPasswordException
 import com.example.chekitoki.domain.user.exception.NoSuchUserException
 import com.example.chekitoki.domain.user.repository.UserRepository
 import com.example.chekitoki.domain.user.repository.UserStoreImpl
@@ -22,6 +25,8 @@ class UserServiceTest : DescribeSpec({
         context("정상적인 회원 가입 요청이 주어진 경우") {
             it("새로운 유저를 성공적으로 생성한다.") {
                 every { userRepository.findById(UserFixtures.id) } returns Optional.of(UserFixtures.testUser)
+                every { userRepository.existsByUserId(UserFixtures.userId) } returns false
+                every { userRepository.save(any()) } returns UserFixtures.testUser
 
                 val result = userService.createUser(UserFixtures.CreateInfo)
 
@@ -68,6 +73,7 @@ class UserServiceTest : DescribeSpec({
         context("정상적인 프로필 수정 요청이 주어진 경우") {
             it("유저의 프로필을 수정한다.") {
                 every { userRepository.findByUserId(UserFixtures.userId) } returns UserFixtures.testUser
+                every { userRepository.save(any()) } returns UserFixtures.modifiedProfileUser
 
                 val result = userService.updateProfile(UserFixtures.userId, UserFixtures.UpdateProfileInfo)
 
@@ -80,6 +86,8 @@ class UserServiceTest : DescribeSpec({
         context("정상적인 비밀번호 수정 요청이 주어진 경우") {
             it("유저의 비밀번호를 수정한다.") {
                 every { userRepository.findByUserId(UserFixtures.userId) } returns UserFixtures.testUser
+                every { userRepository.save(any()) } returns UserFixtures.modifiedPasswordUser
+                every { encoder.matches(any(), any()) } returns true
 
                 userService.updatePassword(UserFixtures.userId, UserFixtures.UpdatePasswordInfo)
             }
@@ -88,6 +96,7 @@ class UserServiceTest : DescribeSpec({
         context("유저가 입력한 이전 비밀번호가 일치하지 않으면") {
             it("비밃번호 불일치 예외를 던진다.") {
                 every { userRepository.findByUserId(UserFixtures.userId) } returns UserFixtures.testUser
+                every { encoder.matches(any(), any()) } returns false
 
                 shouldThrow<InvalidPasswordException> {
                     userService.updatePassword(UserFixtures.userId, UserFixtures.WrongUpdatePasswordInfo)
@@ -98,6 +107,7 @@ class UserServiceTest : DescribeSpec({
         context("유저가 입력한 새로운 비밀번호가 이전 비밀번호와 동일하면") {
             it("새로운 비밀번호가 이전 비밀번호와 동일하다는 예외를 던진다.") {
                 every { userRepository.findByUserId(UserFixtures.userId) } returns UserFixtures.testUser
+                every { encoder.matches(any(), any()) } returns true
 
                 shouldThrow<DuplicatePasswordException> {
                     userService.updatePassword(UserFixtures.userId, UserFixtures.DuplicatePasswordInfo)
@@ -110,6 +120,7 @@ class UserServiceTest : DescribeSpec({
         context("정상적인 회원 탈퇴 요청이 주어진 경우") {
             it("유저를 삭제한다.") {
                 every { userRepository.findByUserId(UserFixtures.userId) } returns UserFixtures.testUser
+                every { userRepository.deleteByUserId(UserFixtures.userId) } just Runs
 
                 userService.deleteUser(UserFixtures.userId)
             }
