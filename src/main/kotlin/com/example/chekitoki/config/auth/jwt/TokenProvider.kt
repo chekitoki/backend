@@ -1,5 +1,7 @@
 package com.example.chekitoki.config.auth.jwt
 
+import com.example.chekitoki.api.exception.BusinessException
+import com.example.chekitoki.api.response.ResponseCode
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -22,6 +24,7 @@ class TokenProvider(
         const val REFRESH_TOKEN = "refresh-token"
     }
 
+    class InvalidTokenException : BusinessException(ResponseCode.UNAUTHORIZED, "Token is not valid")
 
     fun generateToken(authentication: Authentication, isAccess: Boolean): String {
         val now = Date()
@@ -40,12 +43,16 @@ class TokenProvider(
     }
 
     fun validateToken(token: String): Boolean {
-        try {
+        return try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
-            return true
+            true
         } catch (e: Exception) {
-            return false
+            false
         }
+    }
+
+    fun validateTokenOrThrow(token: String) {
+        if (!validateToken(token)) throw InvalidTokenException()
     }
 
     fun getClaims(token: String): Claims {
