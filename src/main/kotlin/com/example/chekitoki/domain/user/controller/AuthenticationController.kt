@@ -24,7 +24,7 @@ class AuthenticationController (
         @AuthenticationPrincipal userDetails: UserDetails,
     ) {
         // TODO: 로그아웃한 유저의 access token 블랙리스트 추가
-        authenticationService.logout(userDetails)
+        authenticationService.logout(userDetails.username)
     }
 
     @PatchMapping("/reissue")
