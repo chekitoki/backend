@@ -1,6 +1,8 @@
 package com.example.chekitoki.config
 
 import com.example.chekitoki.config.auth.jwt.JwtAuthenticationFilter
+import com.example.chekitoki.config.auth.jwt.exception.JwtAccessDeniedHandler
+import com.example.chekitoki.config.auth.jwt.exception.JwtAuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -19,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig (
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val jwtAccessDeniedHandler: JwtAccessDeniedHandler,
+    private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint,
     private val userDetailsService: UserDetailsService,
 ) {
     @Bean
@@ -34,6 +38,10 @@ class SecurityConfig (
                 request
                     .requestMatchers("/api/**").permitAll()
                     .anyRequest().authenticated()
+            }
+            .exceptionHandling {
+                it.accessDeniedHandler(jwtAccessDeniedHandler)
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
