@@ -37,7 +37,7 @@ class AuthenticationService(
     }
 
     @Transactional
-    fun logout(userDetails: UserDetails) {
+    fun logout(userId: String) {
         val accessToken = CookieUtils.getCookie(TokenProvider.ACCESS_TOKEN)
         val refreshToken = CookieUtils.getCookie(TokenProvider.REFRESH_TOKEN)
 
@@ -50,11 +50,8 @@ class AuthenticationService(
 
     @Transactional
     fun reissue() {
-        val refreshToken = (CookieUtils.getCookie(TokenProvider.REFRESH_TOKEN) ?: throw RuntimeException("Refresh token is not found")).value
-
-        if (!tokenProvider.validateToken(refreshToken)) {
-            throw RuntimeException("Refresh token is not valid")
-        }
+        val refreshToken = CookieUtils.getCookie(TokenProvider.REFRESH_TOKEN).value
+        tokenProvider.validateTokenOrThrow(refreshToken)
 
         val claims = tokenProvider.getClaims(refreshToken)
         val user = userStore.getByUserId(claims.subject)
