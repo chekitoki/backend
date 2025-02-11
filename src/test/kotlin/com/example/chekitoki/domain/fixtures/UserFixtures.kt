@@ -36,7 +36,7 @@ class UserFixtures {
         val UpdateProfileRequest = UserRequestDto.UpdateProfile(modifiedName)
 
         val UpdatePasswordRequest = UserRequestDto.UpdatePassword(userPassword, modifiedPassword)
-        val WrongUpdatePasswordRequest = UserRequestDto.UpdatePassword(userPassword + "wrong", modifiedPassword)
+        val WrongUpdatePasswordRequest = UserRequestDto.UpdatePassword(userPassword + "wrong", "")
         val DuplicatePasswordRequest = UserRequestDto.UpdatePassword(userPassword, userPassword)
 
         /* info */
