@@ -1,17 +1,18 @@
 package com.example.chekitoki.domain.fixtures
 
+import com.example.chekitoki.domain.user.dto.UserInfo
 import com.example.chekitoki.domain.user.dto.UserRequestDto
 import com.example.chekitoki.domain.user.model.User
 
 class UserFixtures {
     companion object {
-        const val userId = "test"
+        const val userId = "testuser"
         const val userEmail = "test@test.com"
         const val userName = "테스트"
         const val userPassword = "asdfqwer1234"
         const val id = 1L
 
-        const val modifiedName = "수정된 테스트"
+        const val modifiedName = "수정된테스트"
         private const val modifiedPassword = "qwer1234asdf"
 
         private const val anotherUserId = "rnignon"
@@ -30,6 +31,7 @@ class UserFixtures {
         val WrongLoginRequest = UserRequestDto.Login(userId, "wrong-password")
 
         val CreateRequest = UserRequestDto.Create(userId, userEmail, userName, userPassword)
+        val WrongCreateRequest = UserRequestDto.Create("wrong!id?", "notemail", "123456789012345678901", "wrongpassword")
 
         val UpdateProfileRequest = UserRequestDto.UpdateProfile(modifiedName)
 
@@ -48,5 +50,11 @@ class UserFixtures {
         val UpdatePasswordInfo = UpdatePasswordRequest.toInfo()
         val WrongUpdatePasswordInfo = WrongUpdatePasswordRequest.toInfo()
         val DuplicatePasswordInfo = DuplicatePasswordRequest.toInfo()
+
+        /* response */
+        val UserResponseInfo = UserInfo.Response(id, userId, userEmail, userName)
+        val UserUpdatedResponseInfo = UserInfo.Response(id, userId, userEmail, modifiedName)
+        val DetailUserResponse = UserResponseInfo.toResponseDetail()
+        val SummaryUserResponse = UserResponseInfo.toResponseSummary()
     }
 }
