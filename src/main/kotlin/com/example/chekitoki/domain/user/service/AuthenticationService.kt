@@ -4,6 +4,7 @@ import com.example.chekitoki.config.auth.jwt.TokenProvider
 import com.example.chekitoki.domain.token.model.RefreshToken
 import com.example.chekitoki.domain.token.repository.RefreshTokenStore
 import com.example.chekitoki.domain.user.dto.UserInfo
+import com.example.chekitoki.domain.user.exception.InvalidCredentialsException
 import com.example.chekitoki.utils.CookieUtils
 import io.jsonwebtoken.Claims
 import org.springframework.security.authentication.AuthenticationManager
@@ -37,7 +38,7 @@ class AuthenticationService(
     }
 
     @Transactional
-    fun logout(userDetails: UserDetails) {
+    fun logout(userId: String) {
         val accessToken = CookieUtils.getCookie(TokenProvider.ACCESS_TOKEN)
         val refreshToken = CookieUtils.getCookie(TokenProvider.REFRESH_TOKEN)
 
@@ -50,11 +51,8 @@ class AuthenticationService(
 
     @Transactional
     fun reissue() {
-        val refreshToken = (CookieUtils.getCookie(TokenProvider.REFRESH_TOKEN) ?: throw RuntimeException("Refresh token is not found")).value
-
-        if (!tokenProvider.validateToken(refreshToken)) {
-            throw RuntimeException("Refresh token is not valid")
-        }
+        val refreshToken = CookieUtils.getCookie(TokenProvider.REFRESH_TOKEN).value
+        tokenProvider.validateTokenOrThrow(refreshToken)
 
         val claims = tokenProvider.getClaims(refreshToken)
         val user = userStore.getByUserId(claims.subject)
@@ -72,7 +70,11 @@ class AuthenticationService(
 
     private fun authenticate(username: String, password: String): Authentication {
         val authenticationToken = UsernamePasswordAuthenticationToken(username, password)
-        return authenticationManager.authenticate(authenticationToken)
+        return try {
+            authenticationManager.authenticate(authenticationToken)
+        } catch (e: Exception) {
+            throw InvalidCredentialsException("아이디 또는 비밀번호가 올바르지 않습니다.")
+        }
     }
 
     private fun addCookies(accessToken: String, refreshToken: String) {

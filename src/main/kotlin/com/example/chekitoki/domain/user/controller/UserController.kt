@@ -3,6 +3,9 @@ package com.example.chekitoki.domain.user.controller
 import com.example.chekitoki.domain.user.dto.UserRequestDto
 import com.example.chekitoki.domain.user.dto.UserResponseDto
 import com.example.chekitoki.domain.user.service.UserService
+import jakarta.validation.Valid
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -12,7 +15,7 @@ class UserController (
 ) {
     @PostMapping
     fun createUser(
-        @RequestBody request: UserRequestDto.Create,
+        @Valid @RequestBody request: UserRequestDto.Create,
     ): UserResponseDto {
         val response = userService.createUser(request.toInfo())
         return response.toResponseDetail()
@@ -28,23 +31,25 @@ class UserController (
 
     @PatchMapping("/update/profile")
     fun updateUserProfile(
-        @RequestBody request: UserRequestDto.UpdateProfile,
+        @AuthenticationPrincipal userDetails: UserDetails,
+        @Valid @RequestBody request: UserRequestDto.UpdateProfile,
     ): UserResponseDto {
-        val response = userService.updateProfile(request.toInfo())
+        val response = userService.updateProfile(userDetails.username, request.toInfo())
         return response.toResponseDetail()
     }
 
     @PatchMapping("/update/password")
     fun updateUserPassword(
-        @RequestBody request: UserRequestDto.UpdatePassword,
+        @AuthenticationPrincipal userDetails: UserDetails,
+        @Valid @RequestBody request: UserRequestDto.UpdatePassword,
     ) {
-        return userService.updatePassword(request.toInfo())
+        return userService.updatePassword(userDetails.username, request.toInfo())
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     fun deleteUser(
-        @PathVariable userId: Long,
+        @AuthenticationPrincipal userDetails: UserDetails,
     ) {
-        userService.deleteUser(userId)
+        userService.deleteUser(userDetails.username)
     }
 }

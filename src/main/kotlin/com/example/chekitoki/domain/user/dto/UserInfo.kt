@@ -16,12 +16,10 @@ class UserInfo {
     )
 
     data class UpdateProfile(
-        val id: Long,
         val name: String,
     )
 
     data class UpdatePassword(
-        val id: Long,
         val oldPassword: String,
         val newPassword: String,
     )

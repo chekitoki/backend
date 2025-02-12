@@ -3,10 +3,10 @@ package com.example.chekitoki.utils
 import com.example.chekitoki.api.exception.BusinessException
 import com.example.chekitoki.api.response.ResponseCode
 import jakarta.servlet.http.Cookie
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
 
 object CookieUtils {
+    class NoSuchCookieException(message: String?) : BusinessException(ResponseCode.NOT_FOUND, message)
+
     fun findCookie(name: String): Cookie? {
         val request = RequestUtils.getHttpServletRequest()
         val cookies = request.cookies
@@ -16,7 +16,8 @@ object CookieUtils {
     fun getCookie(name: String): Cookie {
         val request = RequestUtils.getHttpServletRequest()
         val cookies = request.cookies
-        return cookies?.find { it.name == name } ?: throw BusinessException(ResponseCode.NOT_FOUND, "No cookie found. name = $name")
+        return cookies?.find { it.name == name }
+            ?: throw NoSuchCookieException("No cookie found. name = $name")
     }
 
     fun addCookie(name: String, value: String, maxAge: Int) {

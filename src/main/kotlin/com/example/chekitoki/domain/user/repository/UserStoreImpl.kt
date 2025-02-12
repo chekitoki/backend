@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component
 class UserStoreImpl(
     private val userRepository: UserRepository,
 ) : UserStore {
+    override fun existsByUserId(userId: String): Boolean {
+        return userRepository.existsByUserId(userId)
+    }
+
     override fun findByEmail(email: String): User? {
         return userRepository.findByEmail(email)
     }
@@ -32,7 +36,7 @@ class UserStoreImpl(
         return userRepository.save(user)
     }
 
-    override fun deleteById(id: Long) {
-        userRepository.deleteById(id)
+    override fun deleteByUserId(userId: String) {
+        userRepository.deleteByUserId(userId)
     }
 }

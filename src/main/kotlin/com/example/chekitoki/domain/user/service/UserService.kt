@@ -2,7 +2,8 @@ package com.example.chekitoki.domain.user.service
 
 import com.example.chekitoki.config.PasswordEncoderWrapper
 import com.example.chekitoki.domain.user.dto.UserInfo
-import com.example.chekitoki.domain.user.dto.UserResponseDto
+import com.example.chekitoki.domain.user.exception.DuplicatePasswordException
+import com.example.chekitoki.domain.user.exception.DuplicateUserException
 import com.example.chekitoki.domain.user.exception.InvalidPasswordException
 import com.example.chekitoki.domain.user.model.User
 import org.springframework.stereotype.Service
@@ -15,6 +16,7 @@ class UserService(
 ) {
     @Transactional
     fun createUser(info: UserInfo.Create): UserInfo.Response {
+        validateUserId(info.userId)
         val user = userStore.save(User(info.userId, info.email, info.name, encoder.encode(info.password)))
         return UserInfo.Response(user)
     }
@@ -25,8 +27,8 @@ class UserService(
     }
 
     @Transactional
-    fun updateProfile(info: UserInfo.UpdateProfile): UserInfo.Response {
-        val user = userStore.getById(info.id)
+    fun updateProfile(userId: String, info: UserInfo.UpdateProfile): UserInfo.Response {
+        val user = userStore.getByUserId(userId)
 
         user.updateProfile(info.name)
 
@@ -34,23 +36,36 @@ class UserService(
     }
 
     @Transactional
-    fun updatePassword(info: UserInfo.UpdatePassword) {
-        val user = userStore.getById(info.id)
+    fun updatePassword(userId: String, info: UserInfo.UpdatePassword) {
+        val user = userStore.getByUserId(userId)
 
-        confirmPassword(info.oldPassword, user.password)
+        validatePasswordMatch(info.oldPassword, user.password)
+        validateDuplicatePassword(info.oldPassword, info.newPassword)
 
         user.updatePassword(encoder.encode(info.newPassword))
         userStore.save(user)
     }
 
     @Transactional
-    fun deleteUser(id: Long) {
-        userStore.deleteById(id)
+    fun deleteUser(userId: String) {
+        userStore.deleteByUserId(userId)
     }
 
-    private fun confirmPassword(oldPassword: String, newPassword: String) {
+    private fun validateUserId(userId: String) {
+        if (userStore.existsByUserId(userId)) {
+            throw DuplicateUserException("이미 존재하는 아이디입니다.")
+        }
+    }
+
+    private fun validatePasswordMatch(oldPassword: String, newPassword: String) {
         if (!encoder.matches(oldPassword, newPassword)) {
             throw InvalidPasswordException("비밀번호가 일치하지 않습니다.")
+        }
+    }
+
+    private fun validateDuplicatePassword(oldPassword: String, newPassword: String) {
+        if (oldPassword == newPassword) {
+            throw DuplicatePasswordException("이전 비밀번호와 동일한 비밀번호는 사용할 수 없습니다.")
         }
     }
 }
