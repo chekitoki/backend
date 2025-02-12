@@ -3,6 +3,7 @@ package com.example.chekitoki.domain.user.controller
 import com.example.chekitoki.domain.user.dto.UserRequestDto
 import com.example.chekitoki.domain.user.dto.UserResponseDto
 import com.example.chekitoki.domain.user.service.AuthenticationService
+import jakarta.validation.Valid
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
@@ -14,7 +15,7 @@ class AuthenticationController (
 ) {
     @PostMapping("/login")
     fun login(
-        @RequestBody request: UserRequestDto.Login,
+        @Valid @RequestBody request: UserRequestDto.Login,
     ) : UserResponseDto {
         return authenticationService.login(request.toInfo()).toResponseDetail()
     }
