@@ -6,6 +6,7 @@ import com.example.chekitoki.domain.fixtures.UserFixtures
 import com.example.chekitoki.domain.token.model.RefreshToken
 import com.example.chekitoki.domain.token.repository.RefreshTokenRepository
 import com.example.chekitoki.domain.token.repository.RefreshTokenStore
+import com.example.chekitoki.domain.user.exception.InvalidCredentialsException
 import com.example.chekitoki.domain.user.repository.UserRepository
 import com.example.chekitoki.domain.user.repository.UserStoreImpl
 import com.example.chekitoki.utils.CookieUtils
@@ -78,7 +79,7 @@ class AuthenticationServiceTest : DescribeSpec({
             it("로그인에 실패하여 인증 예외를 던진다.") {
                 every { authenticationManager.authenticate(any()) } throws BadCredentialsException("Bad credentials")
 
-                shouldThrow<AuthenticationException> {
+                shouldThrow<InvalidCredentialsException> {
                     authService.login(UserFixtures.WrongLoginInfo)
                 }
             }
