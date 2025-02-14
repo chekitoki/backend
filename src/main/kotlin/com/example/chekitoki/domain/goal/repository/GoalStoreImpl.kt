@@ -15,6 +15,10 @@ class GoalStoreImpl(
         return goalRepository.save(goal)
     }
 
+    override fun findAllByPeriod(period: GoalPeriod): List<Goal> {
+        return goalRepository.findAllByPeriod(period)
+    }
+
     override fun getById(id: Long): Goal {
         return goalRepository.findById(id)
             .orElseThrow { throw NoSuchGoalException("해당 목표를 찾을 수 없습니다.") }

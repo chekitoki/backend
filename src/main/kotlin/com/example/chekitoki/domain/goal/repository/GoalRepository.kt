@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface GoalRepository : JpaRepository<Goal,Long> {
+    fun findAllByPeriod(period: GoalPeriod): List<Goal>
     @Query("SELECT g FROM Goal g WHERE g.user.userId = :userId AND g.period IN :periods")
     fun findByUserUserIdAndPeriod(userId: String, periods: List<GoalPeriod>): List<Goal>
 }
