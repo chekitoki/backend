@@ -1,8 +1,8 @@
 package com.example.chekitoki.domain.goal.service
 
-import com.example.chekitoki.api.exception.ResourceAuthorizationException
 import com.example.chekitoki.domain.goal.dto.GoalInfo
 import com.example.chekitoki.domain.goal.model.Goal
+import com.example.chekitoki.domain.goalrecord.service.GoalRecordStore
 import com.example.chekitoki.domain.user.service.UserStore
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class GoalService(
     private val goalStore: GoalStore,
-//    private val goalRecordStore: GoalRecordStore,
+    private val goalRecordStore: GoalRecordStore,
     private val userStore: UserStore,
 ) {
     @Transactional
@@ -25,45 +25,40 @@ class GoalService(
             period = info.period,
         )
 
-        return GoalInfo.Response(goalStore.save(goal))
+        val savedGoal = goalStore.save(goal)
+        goalRecordStore.findOrCreate(goal, null)
+
+        return GoalInfo.Response(savedGoal)
     }
 
-    fun getGoals(userId: String, info: GoalInfo.Read): List<GoalInfo.Response> {
+    fun getGoals(userId: String, info: GoalInfo.Read): List<GoalInfo.ResponseWithRecord> {
         val goals = goalStore.getByUserAndPeriod(userId, info.period)
-        // date가 있을 시, 해당 date에 대한 record를 가져와서 반환
 
-        return goals.map { GoalInfo.Response(it) }
-    }
+        return goals.mapNotNull { goal ->
+            val records = if (info.date == null) {
+                goalRecordStore.findAllByGoal(goal)
+            } else { goalRecordStore.findByGoalAndDate(goal, info.date)?.let { listOf(it) } }
 
-    fun getGoal(userId: String, goalId: Long): GoalInfo.Response {
-        val goal = goalStore.getById(goalId)
-        checkGoalOwnership(userId, goal)
-        // TODO: record를 포함하여 반환
-
-        return GoalInfo.Response(goal)
+            records?.takeIf { it.isNotEmpty() }?.let { GoalInfo.ResponseWithRecord(goal, it)}
+        }
     }
 
     @Transactional
     fun updateGoal(userId: String, info: GoalInfo.Update): GoalInfo.Response {
         val goal = goalStore.getById(info.id)
-        checkGoalOwnership(userId, goal)
+
+        goalStore.checkGoalOwnership(goal, userId)
 
         goal.updateGoal(info.title, info.description, info.target, info.unit, info.period)
-
         return GoalInfo.Response(goalStore.save(goal))
     }
 
     @Transactional
     fun deleteGoal(userId: String, goalId: Long) {
         val goal = goalStore.getById(goalId)
-        checkGoalOwnership(userId, goal)
+
+        goalStore.checkGoalOwnership(goal, userId)
 
         goalStore.delete(goal)
-    }
-
-    private fun checkGoalOwnership(userId: String, goal: Goal) {
-        if (userId != goal.user.userId) {
-            throw ResourceAuthorizationException("해당 목표에 대한 권한이 없습니다.")
-        }
     }
 }
