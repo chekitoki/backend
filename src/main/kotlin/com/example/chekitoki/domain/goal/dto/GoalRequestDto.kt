@@ -4,7 +4,7 @@ import com.example.chekitoki.domain.goal.enum.GoalPeriod
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import org.hibernate.validator.constraints.Length
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 class GoalRequestDto {
     // TODO: !!를 사용하지 않고, NotBlank를 처리할 수 있는 방안 모색
@@ -42,11 +42,12 @@ class GoalRequestDto {
     }
 
     data class Read(
+        @field:NotNull(message = PERIOD_NOT_NULL_MESSAGE)
         val period: GoalPeriod?,
-        val date: LocalDateTime?,
+        val date: LocalDate?,
     ) {
         fun toInfo() = GoalInfo.Read(
-            period = period,
+            period = period!!,
             date = date,
         )
     }
