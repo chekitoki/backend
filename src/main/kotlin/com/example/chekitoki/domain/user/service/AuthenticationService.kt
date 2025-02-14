@@ -78,7 +78,7 @@ class AuthenticationService(
     }
 
     private fun addCookies(accessToken: String, refreshToken: String) {
-        CookieUtils.addCookie(TokenProvider.ACCESS_TOKEN, accessToken, TokenProvider.ACCESS_TOKEN_EXPIRE_LENGTH.toInt())
-        CookieUtils.addCookie(TokenProvider.REFRESH_TOKEN, refreshToken, TokenProvider.REFRESH_TOKEN_EXPIRE_LENGTH.toInt())
+        CookieUtils.addCookie(TokenProvider.ACCESS_TOKEN, accessToken, (TokenProvider.ACCESS_TOKEN_EXPIRE_LENGTH / 1000).toInt())
+        CookieUtils.addCookie(TokenProvider.REFRESH_TOKEN, refreshToken, (TokenProvider.REFRESH_TOKEN_EXPIRE_LENGTH / 1000).toInt())
     }
 }
