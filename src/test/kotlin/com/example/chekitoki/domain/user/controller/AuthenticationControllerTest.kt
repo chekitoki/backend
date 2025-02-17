@@ -9,16 +9,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
@@ -40,7 +37,7 @@ class AuthenticationControllerTest(
             it("로그인 성공 후 유저 정보를 반환") {
                 mockMvc.post("/api/auth/login") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.LoginRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.loginRequest)
                 }.andDo { print() }
                     .andExpect {
                     status { isOk() }
@@ -75,7 +72,7 @@ class AuthenticationControllerTest(
             it("401 상태 코드 반환") {
                 mockMvc.post("/api/auth/login") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.WrongLoginRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.wrongLoginRequest)
                 }.andDo { print() }
                     .andExpect {
                     status { isOk() }
