@@ -9,16 +9,13 @@ class UserFixtures {
         const val userId = "testuser"
         const val userEmail = "test@test.com"
         const val userName = "테스트"
-        const val userPassword = "asdfqwer1234"
+        private const val userPassword = "asdfqwer1234"
         const val id = 1L
 
         const val modifiedName = "수정된테스트"
         private const val modifiedPassword = "qwer1234asdf"
 
         const val anotherUserId = "rnignon"
-        private const val anotherUserEmail = "rnignon@naver.com"
-        private const val anotherUserName = "rnignon"
-        private const val anotherUserPassword = "fdsarewq4321"
 
         val testUser = User(userId, userEmail, userName, userPassword)
         val modifiedProfileUser = User(userId, userEmail, modifiedName, userPassword)
@@ -52,7 +49,5 @@ class UserFixtures {
         /* response */
         val UserResponseInfo = UserInfo.Response(id, userId, userEmail, userName)
         val UserUpdatedResponseInfo = UserInfo.Response(id, userId, userEmail, modifiedName)
-        val DetailUserResponse = UserResponseInfo.toResponseDetail()
-        val SummaryUserResponse = UserResponseInfo.toResponseSummary()
     }
 }
