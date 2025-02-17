@@ -15,7 +15,7 @@ class UserFixtures {
         const val modifiedName = "수정된테스트"
         private const val modifiedPassword = "qwer1234asdf"
 
-        private const val anotherUserId = "rnignon"
+        const val anotherUserId = "rnignon"
         private const val anotherUserEmail = "rnignon@naver.com"
         private const val anotherUserName = "rnignon"
         private const val anotherUserPassword = "fdsarewq4321"
