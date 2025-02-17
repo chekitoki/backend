@@ -7,7 +7,6 @@ import jakarta.validation.Valid
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -35,16 +34,7 @@ class GoalController(
         @Valid @RequestBody request: GoalRequestDto.Read,
     ): List<GoalResponseDto> {
         val response = goalService.getGoals(userDetails.username, request.toInfo())
-        return response.map { it.toResponseSummary() }
-    }
-
-    @GetMapping("/{goalId}")
-    fun getGoal(
-        @AuthenticationPrincipal userDetails: UserDetails,
-        @PathVariable goalId: Long,
-    ): GoalResponseDto {
-        val response = goalService.getGoal(userDetails.username, goalId)
-        return response.toResponseDetail()
+        return response.map { it.toResponseWithRecord() }
     }
 
     @PatchMapping

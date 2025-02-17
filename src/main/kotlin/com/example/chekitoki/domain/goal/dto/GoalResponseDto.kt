@@ -1,6 +1,7 @@
 package com.example.chekitoki.domain.goal.dto
 
 import com.example.chekitoki.domain.goal.enum.GoalPeriod
+import com.example.chekitoki.domain.goalrecord.dto.GoalRecordResponseDto
 
 sealed class GoalResponseDto {
     data class Detail(
@@ -10,7 +11,6 @@ sealed class GoalResponseDto {
         val target: Int,
         val unit: String,
         val period: GoalPeriod,
-//        val records: List<GoalRecordResponseDto>,
     ) : GoalResponseDto()
 
     data class Summary (
@@ -19,7 +19,6 @@ sealed class GoalResponseDto {
         val description: String?,
     ) : GoalResponseDto()
 
-    /*
     data class WithRecord(
         val id: Long,
         val title: String,
@@ -29,5 +28,4 @@ sealed class GoalResponseDto {
         val period: GoalPeriod,
         val records: List<GoalRecordResponseDto>,
     ) : GoalResponseDto()
-     */
 }

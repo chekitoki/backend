@@ -2,7 +2,9 @@ package com.example.chekitoki.domain.goal.dto
 
 import com.example.chekitoki.domain.goal.enum.GoalPeriod
 import com.example.chekitoki.domain.goal.model.Goal
-import java.time.LocalDateTime
+import com.example.chekitoki.domain.goalrecord.dto.GoalRecordInfo
+import com.example.chekitoki.domain.goalrecord.model.GoalRecord
+import java.time.LocalDate
 
 class GoalInfo {
     data class Create(
@@ -14,8 +16,8 @@ class GoalInfo {
     )
 
     data class Read(
-        val period: GoalPeriod?,
-        val date: LocalDateTime?,
+        val period: GoalPeriod,
+        val date: LocalDate?,
     )
 
     data class Update(
@@ -60,7 +62,6 @@ class GoalInfo {
         )
     }
 
-    /*
     data class ResponseWithRecord(
         val id: Long,
         val title: String,
@@ -68,7 +69,7 @@ class GoalInfo {
         val target: Int,
         val unit: String,
         val period: GoalPeriod,
-        val records: List<GoalRecordResponseDto>,
+        val records: List<GoalRecordInfo.Response>,
     ) {
         constructor(goal: Goal, records: List<GoalRecord>): this(
             id = goal.id,
@@ -77,7 +78,7 @@ class GoalInfo {
             target = goal.target,
             unit = goal.unit,
             period = goal.period,
-            records = records.map { GoalRecordResponseDto(it) },
+            records = records.map { GoalRecordInfo.Response(it) },
         )
 
         fun toResponseWithRecord() = GoalResponseDto.WithRecord(
@@ -87,8 +88,7 @@ class GoalInfo {
             target = target,
             unit = unit,
             period = period,
-            records = records,
+            records = records.map { it.toResponseDto() },
         )
     }
-     */
 }
