@@ -36,6 +36,10 @@ class GoalRecordStoreImpl(
             .orElseThrow { throw NoSuchGoalRecordException("해당 목표 기록을 찾을 수 없습니다.") }
     }
 
+    override fun deleteAllByGoal(goal: Goal) {
+        goalRecordRepository.deleteAllByGoal(goal)
+    }
+
     override fun delete(goalRecord: GoalRecord) {
         goalRecordRepository.delete(goalRecord)
     }

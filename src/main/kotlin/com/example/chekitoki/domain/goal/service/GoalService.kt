@@ -58,6 +58,7 @@ class GoalService(
         val goal = goalStore.getById(goalId)
 
         goalStore.checkGoalOwnership(goal, userId)
+        goalRecordStore.deleteAllByGoal(goal)
 
         goalStore.delete(goal)
     }

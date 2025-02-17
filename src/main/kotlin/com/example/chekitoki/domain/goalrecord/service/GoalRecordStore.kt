@@ -10,5 +10,6 @@ interface GoalRecordStore {
     fun findAllByGoal(goal: Goal): List<GoalRecord>
     fun findByGoalAndDate(goal: Goal, date: LocalDate): GoalRecord?
     fun getById(id: Long): GoalRecord
+    fun deleteAllByGoal(goal: Goal)
     fun delete(goalRecord: GoalRecord)
 }
