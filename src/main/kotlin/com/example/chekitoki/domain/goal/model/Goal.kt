@@ -37,18 +37,17 @@ class Goal(
     var unit: String = unit
 
     @Enumerated(EnumType.STRING)
-    var period: GoalPeriod = period
+    val period: GoalPeriod = period
 
     var status: GoalStatus = GoalStatus.ACTIVE
 
     var deletedAt: LocalDateTime? = null
 
-    fun updateGoal(title: String?, description: String?, target: Int?, unit: String?, period: GoalPeriod?) {
+    fun updateGoal(title: String?, description: String?, target: Int?, unit: String?) {
         title?.let { this.title = it }
         description?.let { this.description = it }
         target?.let { this.target = it }
         unit?.let { this.unit = it }
-        period?.let { this.period = it }
     }
 
     fun updateStatus(status: GoalStatus) {

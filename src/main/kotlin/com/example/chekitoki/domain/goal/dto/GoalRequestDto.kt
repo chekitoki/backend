@@ -65,8 +65,6 @@ class GoalRequestDto {
         @field:NotBlank(message = UNIT_NOT_BLANK_MESSAGE)
         @field:Length(max = 10, message = UNIT_LENGTH_MESSAGE)
         val unit: String?,
-        @field:NotNull(message = PERIOD_NOT_NULL_MESSAGE)
-        val period: GoalPeriod?,
     ) {
         fun toInfo() = GoalInfo.Update(
             id = id,
@@ -74,7 +72,6 @@ class GoalRequestDto {
             description = description,
             target = target,
             unit = unit,
-            period = period,
         )
     }
 }

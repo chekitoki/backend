@@ -26,7 +26,6 @@ class GoalInfo {
         val description: String?,
         val target: Int?,
         val unit: String?,
-        val period: GoalPeriod?,
     )
 
     data class Response(

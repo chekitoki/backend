@@ -49,7 +49,7 @@ class GoalService(
 
         goalStore.checkGoalOwnership(goal, userId)
 
-        goal.updateGoal(info.title, info.description, info.target, info.unit, info.period)
+        goal.updateGoal(info.title, info.description, info.target, info.unit)
         return GoalInfo.Response(goalStore.save(goal))
     }
 
