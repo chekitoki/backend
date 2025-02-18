@@ -9,7 +9,7 @@ import java.time.LocalDate
 class GoalRequestDto {
     // TODO: !!를 사용하지 않고, NotBlank를 처리할 수 있는 방안 모색
     companion object {
-        const val ID_NOT_BLANK_MESSAGE = "ID를 입력해주세요."
+        const val ID_NOT_NULL_MESSAGE = "ID를 입력해주세요."
         const val TITLE_NOT_BLANK_MESSAGE = "목표명을 입력해주세요."
         const val TITLE_LENGTH_MESSAGE = "목표명은 20자 이내로 입력해주세요."
         const val DESCRIPTION_LENGTH_MESSAGE = "설명은 100자 이내로 입력해주세요."
@@ -53,7 +53,7 @@ class GoalRequestDto {
     }
 
     data class Update(
-        @field:NotBlank(message = ID_NOT_BLANK_MESSAGE)
+        @field:NotNull(message = ID_NOT_NULL_MESSAGE)
         val id: Long,
         @field:NotBlank(message = TITLE_NOT_BLANK_MESSAGE)
         @field:Length(max = 20, message = TITLE_LENGTH_MESSAGE)
@@ -65,8 +65,6 @@ class GoalRequestDto {
         @field:NotBlank(message = UNIT_NOT_BLANK_MESSAGE)
         @field:Length(max = 10, message = UNIT_LENGTH_MESSAGE)
         val unit: String?,
-        @field:NotNull(message = PERIOD_NOT_NULL_MESSAGE)
-        val period: GoalPeriod?,
     ) {
         fun toInfo() = GoalInfo.Update(
             id = id,
@@ -74,7 +72,6 @@ class GoalRequestDto {
             description = description,
             target = target,
             unit = unit,
-            period = period,
         )
     }
 }

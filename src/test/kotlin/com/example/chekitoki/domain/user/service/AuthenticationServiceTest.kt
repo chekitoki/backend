@@ -26,7 +26,6 @@ import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.AuthenticationException
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 
@@ -62,7 +61,7 @@ class AuthenticationServiceTest : DescribeSpec({
                 every { userRepository.findByUserId(UserFixtures.userId) } returns UserFixtures.testUser
                 every { tokenRepository.save(any()) } returns RefreshToken(UserFixtures.testUser, refreshToken)
 
-                val result = authService.login(UserFixtures.LoginInfo)
+                val result = authService.login(UserFixtures.loginInfo)
 
                 val accessTokenCookie = mockResponse.getCookie(TokenProvider.ACCESS_TOKEN)
                 val refreshTokenCookie = mockResponse.getCookie(TokenProvider.REFRESH_TOKEN)
@@ -80,7 +79,7 @@ class AuthenticationServiceTest : DescribeSpec({
                 every { authenticationManager.authenticate(any()) } throws BadCredentialsException("Bad credentials")
 
                 shouldThrow<InvalidCredentialsException> {
-                    authService.login(UserFixtures.WrongLoginInfo)
+                    authService.login(UserFixtures.wrongLoginInfo)
                 }
             }
         }

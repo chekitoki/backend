@@ -39,7 +39,7 @@ class UserControllerTest(
             it("생성한 유저의 정보를 담은 200 상태 코드 반환") {
                 mockMvc.post("/api/user") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.CreateRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.createRequest)
                 }.andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
@@ -58,7 +58,7 @@ class UserControllerTest(
             it("409 상태 코드 반환") {
                 mockMvc.post("/api/user") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.CreateRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.createRequest)
                 }.andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
@@ -73,7 +73,7 @@ class UserControllerTest(
             it("400 상태 코드 반환") {
                 mockMvc.post("/api/user") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.WrongCreateRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.wrongCreateRequest)
                 }.andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
@@ -88,7 +88,7 @@ class UserControllerTest(
             it("400 상태 코드 반환") {
                 mockMvc.post("/api/user") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.CreateRequest.copy(email = ""))
+                    content = objectMapper.writeValueAsString(UserFixtures.createRequest.copy(email = ""))
                 }.andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
@@ -138,7 +138,7 @@ class UserControllerTest(
             it("유저 프로필을 업데이트하고 200 상태 코드 반환") {
                 mockMvc.patch("/api/user/update/profile") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.UpdateProfileRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.updateProfileRequest)
                 }.andDo{print()}
                     .andExpect {
                         status { isOk() }
@@ -157,7 +157,7 @@ class UserControllerTest(
             it("400 상태 코드 반환") {
                 mockMvc.patch("/api/user/update/profile") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.UpdateProfileRequest.copy(name = ""))
+                    content = objectMapper.writeValueAsString(UserFixtures.updateProfileRequest.copy(name = ""))
                 }.andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
@@ -175,7 +175,7 @@ class UserControllerTest(
             it("유저 비밀번호를 업데이트하고 200 상태 코드 반환") {
                 mockMvc.patch("/api/user/update/password") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.UpdatePasswordRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.updatePasswordRequest)
                 }.andExpect {
                     status { isOk() }
                 }
@@ -186,7 +186,7 @@ class UserControllerTest(
             it("400 상태 코드 반환") {
                 mockMvc.patch("/api/user/update/password") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.WrongUpdatePasswordRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.wrongUpdatePasswordRequest)
                 }.andDo { print() }
                     .andExpect {
                     status { isOk() }
@@ -203,7 +203,7 @@ class UserControllerTest(
             it("400 상태 코드 반환") {
                 mockMvc.patch("/api/user/update/password") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(UserFixtures.DuplicatePasswordRequest)
+                    content = objectMapper.writeValueAsString(UserFixtures.duplicatePasswordRequest)
                 }.andDo { print() }
                     .andExpect {
                     status { isOk() }

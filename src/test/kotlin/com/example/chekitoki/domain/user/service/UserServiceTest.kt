@@ -28,7 +28,7 @@ class UserServiceTest : DescribeSpec({
                 every { userRepository.existsByUserId(UserFixtures.userId) } returns false
                 every { userRepository.save(any()) } returns UserFixtures.testUser
 
-                val result = userService.createUser(UserFixtures.CreateInfo)
+                val result = userService.createUser(UserFixtures.createInfo)
 
                 result.userId shouldBe UserFixtures.userId
                 result.name shouldBe UserFixtures.userName
@@ -41,7 +41,7 @@ class UserServiceTest : DescribeSpec({
                 every { userRepository.existsByUserId(UserFixtures.userId) } returns true
 
                 shouldThrow<DuplicateUserException> {
-                    userService.createUser(UserFixtures.CreateInfo)
+                    userService.createUser(UserFixtures.createInfo)
                 }
             }
         }
@@ -75,7 +75,7 @@ class UserServiceTest : DescribeSpec({
                 every { userRepository.findByUserId(UserFixtures.userId) } returns UserFixtures.testUser
                 every { userRepository.save(any()) } returns UserFixtures.modifiedProfileUser
 
-                val result = userService.updateProfile(UserFixtures.userId, UserFixtures.UpdateProfileInfo)
+                val result = userService.updateProfile(UserFixtures.userId, UserFixtures.updateProfileInfo)
 
                 result.name shouldBe UserFixtures.modifiedName
             }
@@ -89,7 +89,7 @@ class UserServiceTest : DescribeSpec({
                 every { userRepository.save(any()) } returns UserFixtures.modifiedPasswordUser
                 every { encoder.matches(any(), any()) } returns true
 
-                userService.updatePassword(UserFixtures.userId, UserFixtures.UpdatePasswordInfo)
+                userService.updatePassword(UserFixtures.userId, UserFixtures.updatePasswordInfo)
             }
         }
 
@@ -99,7 +99,7 @@ class UserServiceTest : DescribeSpec({
                 every { encoder.matches(any(), any()) } returns false
 
                 shouldThrow<InvalidPasswordException> {
-                    userService.updatePassword(UserFixtures.userId, UserFixtures.WrongUpdatePasswordInfo)
+                    userService.updatePassword(UserFixtures.userId, UserFixtures.wrongUpdatePasswordInfo)
                 }
             }
         }
@@ -110,7 +110,7 @@ class UserServiceTest : DescribeSpec({
                 every { encoder.matches(any(), any()) } returns true
 
                 shouldThrow<DuplicatePasswordException> {
-                    userService.updatePassword(UserFixtures.userId, UserFixtures.DuplicatePasswordInfo)
+                    userService.updatePassword(UserFixtures.userId, UserFixtures.duplicatePasswordInfo)
                 }
             }
         }

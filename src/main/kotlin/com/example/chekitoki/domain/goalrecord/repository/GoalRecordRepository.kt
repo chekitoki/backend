@@ -11,4 +11,5 @@ interface GoalRecordRepository : JpaRepository<GoalRecord, Long>{
     fun findAllByGoal(goal: Goal): List<GoalRecord>
     fun findByGoalAndDate(goal: Goal, date: LocalDate): GoalRecord?
     fun findByGoalAndDateBetween(goal: Goal, start: LocalDate, end: LocalDate): GoalRecord?
+    fun deleteAllByGoal(goal: Goal)
 }
