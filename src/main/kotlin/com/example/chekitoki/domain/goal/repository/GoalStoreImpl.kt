@@ -24,21 +24,21 @@ class GoalStoreImpl(
             .orElseThrow { throw NoSuchGoalException("해당 목표를 찾을 수 없습니다.") }
     }
 
-    override fun getByUserAndPeriod(userId: String, period: GoalPeriod): List<Goal> {
+    override fun getByUserAndPeriod(userId: Long, period: GoalPeriod): List<Goal> {
         val periods = when (period) {
             GoalPeriod.DAILY -> listOf(GoalPeriod.DAILY, GoalPeriod.WEEKLY, GoalPeriod.MONTHLY)
             GoalPeriod.WEEKLY -> listOf(GoalPeriod.WEEKLY, GoalPeriod.MONTHLY)
             GoalPeriod.MONTHLY -> listOf(GoalPeriod.MONTHLY)
         }
-        return goalRepository.findByUserUserIdAndPeriod(userId, periods)
+        return goalRepository.findByUserIdAndPeriodIn(userId, periods)
     }
 
     override fun delete(goal: Goal) {
         goalRepository.delete(goal)
     }
 
-    override fun checkGoalOwnership(goal: Goal, userId: String) {
-        if (goal.user.userId != userId) {
+    override fun checkGoalOwnership(goal: Goal, userId: Long) {
+        if (goal.user.id != userId) {
             throw ResourceAuthorizationException("해당 목표에 대한 권한이 없습니다.")
         }
     }

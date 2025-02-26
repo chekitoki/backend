@@ -9,5 +9,5 @@ interface UserStore {
     fun getByUserId(userId: String): User
     fun getByEmail(email: String): User
     fun save(user: User): User
-    fun deleteByUserId(userId: String)
+    fun deleteByUserId(userId: Long)
 }

@@ -9,5 +9,5 @@ interface UserRepository : JpaRepository<User, Long> {
     fun existsByUserId(userId: String): Boolean
     fun findByEmail(email: String): User?
     fun findByUserId(userId: String): User?
-    fun deleteByUserId(userId: String)
+    fun deleteByUserId(userId: Long)
 }

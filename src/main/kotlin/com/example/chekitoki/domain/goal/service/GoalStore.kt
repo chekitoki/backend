@@ -7,7 +7,7 @@ interface GoalStore {
     fun save(goal: Goal): Goal
     fun findAllByPeriod(period: GoalPeriod): List<Goal>
     fun getById(id: Long): Goal
-    fun getByUserAndPeriod(userId: String, period: GoalPeriod): List<Goal>
+    fun getByUserAndPeriod(userId: Long, period: GoalPeriod): List<Goal>
     fun delete(goal: Goal)
-    fun checkGoalOwnership(goal: Goal, userId: String)
+    fun checkGoalOwnership(goal: Goal, userId: Long)
 }

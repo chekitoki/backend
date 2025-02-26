@@ -1,11 +1,11 @@
 package com.example.chekitoki.domain.user.controller
 
+import com.example.chekitoki.config.auth.CustomUserDetails
 import com.example.chekitoki.domain.user.dto.UserRequestDto
 import com.example.chekitoki.domain.user.dto.UserResponseDto
 import com.example.chekitoki.domain.user.service.AuthenticationService
 import jakarta.validation.Valid
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -22,10 +22,10 @@ class AuthenticationController (
 
     @DeleteMapping("/logout")
     fun logout(
-        @AuthenticationPrincipal userDetails: UserDetails,
+        @AuthenticationPrincipal userDetails: CustomUserDetails,
     ) {
         // TODO: 로그아웃한 유저의 access token 블랙리스트 추가
-        authenticationService.logout(userDetails.username)
+        authenticationService.logout(userDetails.user)
     }
 
     @PatchMapping("/reissue")

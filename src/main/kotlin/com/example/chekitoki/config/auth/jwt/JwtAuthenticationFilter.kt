@@ -1,5 +1,6 @@
 package com.example.chekitoki.config.auth.jwt
 
+import com.example.chekitoki.config.auth.CustomUserDetailsService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -7,13 +8,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
     private val tokenProvider: TokenProvider,
+    private val customUserDetailsService: CustomUserDetailsService,
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -40,8 +41,8 @@ class JwtAuthenticationFilter(
         val username = claims.subject
         val roles = claims["role"] as List<String>
 
+        val userDetails = customUserDetailsService.loadUserByUsername(username)
         val authorities = roles.map { SimpleGrantedAuthority(it) }
-        val principal = User(username, "", authorities)
-        return UsernamePasswordAuthenticationToken(principal, token, authorities)
+        return UsernamePasswordAuthenticationToken(userDetails, token, authorities)
     }
 }

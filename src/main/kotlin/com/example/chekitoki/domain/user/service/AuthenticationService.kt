@@ -5,13 +5,12 @@ import com.example.chekitoki.domain.token.model.RefreshToken
 import com.example.chekitoki.domain.token.repository.RefreshTokenStore
 import com.example.chekitoki.domain.user.dto.UserInfo
 import com.example.chekitoki.domain.user.exception.InvalidCredentialsException
+import com.example.chekitoki.domain.user.model.User
 import com.example.chekitoki.utils.CookieUtils
-import io.jsonwebtoken.Claims
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -38,7 +37,7 @@ class AuthenticationService(
     }
 
     @Transactional
-    fun logout(userId: String) {
+    fun logout(user: User) {
         val accessToken = CookieUtils.getCookie(TokenProvider.ACCESS_TOKEN)
         val refreshToken = CookieUtils.getCookie(TokenProvider.REFRESH_TOKEN)
 

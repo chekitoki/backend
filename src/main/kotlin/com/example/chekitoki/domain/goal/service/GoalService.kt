@@ -3,6 +3,7 @@ package com.example.chekitoki.domain.goal.service
 import com.example.chekitoki.domain.goal.dto.GoalInfo
 import com.example.chekitoki.domain.goal.model.Goal
 import com.example.chekitoki.domain.goalrecord.service.GoalRecordStore
+import com.example.chekitoki.domain.user.model.User
 import com.example.chekitoki.domain.user.service.UserStore
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,8 +15,7 @@ class GoalService(
     private val userStore: UserStore,
 ) {
     @Transactional
-    fun createGoal(userId: String, info: GoalInfo.Create): GoalInfo.Response {
-        val user = userStore.getByUserId(userId)
+    fun createGoal(user: User, info: GoalInfo.Create): GoalInfo.Response {
         val goal = Goal(
             user = user,
             title = info.title,
@@ -31,8 +31,8 @@ class GoalService(
         return GoalInfo.Response(savedGoal)
     }
 
-    fun getGoals(userId: String, info: GoalInfo.Read): List<GoalInfo.ResponseWithRecord> {
-        val goals = goalStore.getByUserAndPeriod(userId, info.period)
+    fun getGoals(user: User, info: GoalInfo.Read): List<GoalInfo.ResponseWithRecord> {
+        val goals = goalStore.getByUserAndPeriod(user.id, info.period)
 
         return goals.mapNotNull { goal ->
             val records = if (info.date == null) {
@@ -44,20 +44,20 @@ class GoalService(
     }
 
     @Transactional
-    fun updateGoal(userId: String, info: GoalInfo.Update): GoalInfo.Response {
+    fun updateGoal(user: User, info: GoalInfo.Update): GoalInfo.Response {
         val goal = goalStore.getById(info.id)
 
-        goalStore.checkGoalOwnership(goal, userId)
+        goalStore.checkGoalOwnership(goal, user.id)
 
         goal.updateGoal(info.title, info.description, info.target, info.unit)
         return GoalInfo.Response(goalStore.save(goal))
     }
 
     @Transactional
-    fun deleteGoal(userId: String, goalId: Long) {
+    fun deleteGoal(user: User, goalId: Long) {
         val goal = goalStore.getById(goalId)
 
-        goalStore.checkGoalOwnership(goal, userId)
+        goalStore.checkGoalOwnership(goal, user.id)
         goalRecordStore.deleteAllByGoal(goal)
 
         goalStore.delete(goal)
